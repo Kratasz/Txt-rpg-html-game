@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>TEXT RPG Game</title>
+</head>
+<body>
+	<h1>RPG Game</h1>
+<!-- Character stats -->
+<h2>Character Stats</h2>
+<ul>
+	<li>Name: <input type="text" id="name" placeholder="Enter character name"></li>
+	<li>Health: <input type="number" id="health" value="100"></li>
+	<li>Mana: <input type="number" id="mana" value="100"></li>
+	<li>Attack: <input type="number" id="attack" value="10"></li>
+	<li>Defence: <input type="number" id="defence" value="5"></li>
+</ul>
+
+<!-- Inventory -->
+<h2>Inventory</h2>
+<ul id="inventory">
+	<li>Potion <button onclick="usePotion()">Use</button></li>
+	<li>Mana potion <button onclick="useManaPotion()">Use</button></li>
+</ul>
+
+<!-- Combat buttons -->
+<h2>Combat</h2>
+<button onclick="attack()">Attack</button>
+<button onclick="defend()">Defend</button>
+<button onclick="useAbility()">Use Ability</button>
+
+<!-- Display combat messages -->
+<p id="combat-message"></p>
+
+<!-- Game over message -->
+<h2 id="game-over" style="display: none">Game Over</h2>
+
+<!-- Game script -->
+<script>
+	// Global variables
+	let enemyHealth = 100;
+	let enemyAttack = 10;
+	let enemyDefence = 5;
+	let inventory = {
+		potions: 3,
+		manaPotions: 2
+	};
+	
+	// Use potion to restore health
+	function usePotion() {
+		if (inventory.potions > 0) {
+			let healthInput = document.getElementById("health");
+			healthInput.value = parseInt(healthInput.value) + 50;
+			inventory.potions--;
+			updateInventory();
+			document.getElementById("combat-message").innerHTML = "Used potion to restore health";
+		} else {
+			document.getElementById("combat-message").innerHTML = "No potions left in inventory";
+		}
+	}
+	
+	// Use mana potion to restore mana
+	function useManaPotion() {
+		if (inventory.manaPotions > 0) {
+			let manaInput = document.getElementById("mana");
+			manaInput.value = parseInt(manaInput.value) + 50;
+			inventory.manaPotions--;
+			updateInventory();
+			document.getElementById("combat-message").innerHTML = "Used mana potion to restore mana";
+} else {
+document.getElementById("combat-message").innerHTML = "No mana potions left in inventory";
+}
+}	// Attack the enemy
+	function attack() {
+		let attackInput = document.getElementById("attack");
+		let damage = parseInt(attackInput.value) - enemyDefence;
+		if (damage > 0) {
+			enemyHealth -= damage;
+			document.getElementById("combat-message").innerHTML = "Attacked the enemy for " + damage + " damage";
+		} else {
+			document.getElementById("combat-message").innerHTML = "Attack was ineffective";
+		}
+		
+		checkEnemyHealth();
+	}
+	
+	// Defend against enemy attack
+	function defend() {
+		let defenceInput = document.getElementById("defence");
+		let defence = parseInt(defenceInput.value);
+		let damage = enemyAttack - defence;
+		if (damage > 0) {
+			let healthInput = document.getElementById("health");
+			healthInput.value -= damage;
+			document.getElementById("combat-message").innerHTML = "Defended against enemy attack and took " + damage + " damage";
+		} else {
+			document.getElementById("combat-message").innerHTML = "Defence was effective and took no damage";
+		}
+		
+		checkPlayerHealth();
+	}
+	
+	// Use ability
+	function useAbility() {
+		let manaInput = document.getElementById("mana");
+		let mana = parseInt(manaInput.value);
+		if (mana >= 50) {
+			manaInput.value = mana - 50;
+			enemyHealth -= 20;
+			document.getElementById("combat-message").innerHTML = "Used ability and dealt 20 damage to the enemy";
+		} else {
+			document.getElementById("combat-message").innerHTML = "Not enough mana to use ability";
+		}
+		
+		checkEnemyHealth();
+	}
+	
+	// Check if enemy is defeated
+	function checkEnemyHealth() {
+		if (enemyHealth <= 0) {
+			document.getElementById("combat-message").innerHTML = "Enemy defeated!";
+		}
+	}
+	
+	// Check if player is defeated
+	function checkPlayerHealth() {
+		let healthInput = document.getElementById("health");
+		if (parseInt(healthInput.value) <= 0) {
+			healthInput.value = 0;
+			document.getElementById("game-over").style.display = "block";
+		}
+	}
+	
+	// Update inventory display
+	function updateInventory() {
+		let inventoryList = document.getElementById
+
+    ("inventory");
+inventoryList.innerHTML = "";
+inventoryList.innerHTML += "<li>Potions: " + inventory.potions + " <button onclick='usePotion()'>Use</button></li>";
+inventoryList.innerHTML += "<li>Mana potions: " + inventory.manaPotions + " <button onclick='useManaPotion()'>Use</button></li>";
+}
+</script>
+</body>
+</html>
